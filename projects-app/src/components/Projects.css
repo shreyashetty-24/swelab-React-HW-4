@@ -1,36 +1,36 @@
 .projects-page {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 32px 16px;
+  max-width: 1000px;
+  margin: 24px auto;
+  padding: 24px 28px;
+  background: #fff;
+  border: 1px solid #555;
 }
 
 .project-item {
   display: grid;
-  grid-template-columns: 1.4fr 1.6fr auto;
-  gap: 24px;
+  grid-template-columns: 30px 1fr auto auto;
+  gap: 16px;
   align-items: center;
-  background: #fff;
-  border: 1px solid #d9dee6;
-  border-left: 4px solid #d9dee6;
-  border-radius: 6px;
-  padding: 16px 20px;
-  margin-bottom: 12px;
+  background: #f2f2f2;
+  border: 1px solid #555;
+  padding: 8px 16px;
+  margin-bottom: 14px;
 }
 
-.project-item.joined {
-  border-left-color: #2e7d32;
+.project-item.joined { background: #d5e8d4; }
+.project-name { font-size: 1.05rem; }
+.project-members { color: #888; font-size: 0.9rem; }
+
+.hw-set {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
 }
 
-.hw-set + .hw-set {
-  margin-top: 10px;
-}
+.hw-label { min-width: 130px; font-size: 1.1rem; }
 
-.hw-label {
-  margin-bottom: 4px;
-}
-
-@media (max-width: 640px) {
-  .project-item {
-    grid-template-columns: 1fr;
-  }
+@media (max-width: 860px) {
+  .project-item { grid-template-columns: 1fr; }
+  .hw-set { flex-wrap: wrap; }
 }

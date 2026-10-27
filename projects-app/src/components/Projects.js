@@ -2,62 +2,55 @@ import { useState } from 'react';
 import { Typography } from '@mui/material';
 import ProjectItem from './ProjectItem';
 import './Projects.css';
+import Header from './Header';
+const makeHardware = (set1, set2) => [
+  { name: 'HWSet1', checkedOut: set1, capacity: 100 },
+  { name: 'HWSet2', checkedOut: set2, capacity: 100 },
+];
 
-// Hardcoded for now; this will come from the back end later.
+const USERS = ['list', 'of', 'authorized', 'users'];
+
 const INITIAL_PROJECTS = [
-  {
-    id: 1,
-    name: 'Project Name 1',
-    members: ['list', 'of', 'authorized', 'users'],
-    hardware: [
-      { name: 'HWSet1', checkedOut: 50, capacity: 100 },
-      { name: 'HWSet2', checkedOut: 0, capacity: 100 },
-    ],
-    joined: true,
-  },
-  {
-    id: 2,
-    name: 'Project Name 2',
-    members: ['list', 'of', 'authorized', 'users'],
-    hardware: [
-      { name: 'HWSet1', checkedOut: 50, capacity: 100 },
-      { name: 'HWSet2', checkedOut: 0, capacity: 100 },
-    ],
-    joined: false,
-  },
-  {
-    id: 3,
-    name: 'Project Name 3',
-    members: ['list', 'of', 'authorized', 'users'],
-    hardware: [
-      { name: 'HWSet1', checkedOut: 50, capacity: 100 },
-      { name: 'HWSet2', checkedOut: 0, capacity: 100 },
-    ],
-    joined: false,
-  },
+  { id: 1, name: '1', members: USERS, hardware: makeHardware(50, 0), joined: false },
+  { id: 2, name: '2', members: USERS, hardware: makeHardware(50, 0), joined: true },
+  { id: 3, name: '3', members: USERS, hardware: makeHardware(0, 0), joined: false },
 ];
 
 function Projects() {
   const [projects, setProjects] = useState(INITIAL_PROJECTS);
 
-  // Custom event handler: flips a project between joined / not joined.
   const handleToggleJoin = (projectId) => {
     setProjects((current) =>
       current.map((p) => (p.id === projectId ? { ...p, joined: !p.joined } : p))
     );
   };
 
+  const handleAdjustHardware = (projectId, hwName, delta) => {
+    setProjects((current) =>
+      current.map((p) =>
+        p.id !== projectId
+          ? p
+          : {
+              ...p,
+              hardware: p.hardware.map((hw) =>
+                hw.name !== hwName
+                  ? hw
+                  : { ...hw, checkedOut: Math.min(hw.capacity, Math.max(0, hw.checkedOut + delta)) }
+              ),
+            }
+      )
+    );
+  };
+
   return (
     <main className="projects-page">
-      <Typography variant="h4" component="h1" gutterBottom>
-        Projects
-      </Typography>
-
+      <Header title="Projects" />
       {projects.map((project) => (
         <ProjectItem
           key={project.id}
           project={project}
           onToggleJoin={handleToggleJoin}
+          onAdjustHardware={handleAdjustHardware}
         />
       ))}
     </main>

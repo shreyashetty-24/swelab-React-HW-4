@@ -1,22 +1,13 @@
-import { Button, Chip, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import HardwareSet from './HardwareSet';
 
-// Reusable: one row/card for a single project.
-// Props: project (object), onToggleJoin (function from parent)
-function ProjectItem({ project, onToggleJoin }) {
+function ProjectItem({ project, onToggleJoin, onAdjustHardware }) {
   const { id, name, members, hardware, joined } = project;
 
   return (
     <section className={`project-item ${joined ? 'joined' : ''}`}>
-      <div className="project-info">
-        <Typography variant="h6" component="h2">
-          {name}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Authorized users: {members.join(', ')}
-        </Typography>
-        {joined && <Chip label="Joined" color="success" size="small" sx={{ mt: 1 }} />}
-      </div>
+      <Typography className="project-name">{name}</Typography>
+      <Typography className="project-members">{members.join(', ')}</Typography>
 
       <div className="project-hardware">
         {hardware.map((hw) => (
@@ -25,19 +16,17 @@ function ProjectItem({ project, onToggleJoin }) {
             name={hw.name}
             checkedOut={hw.checkedOut}
             capacity={hw.capacity}
+            disabled={!joined}
+            onCheckIn={(qty) => onAdjustHardware(id, hw.name, -qty)}
+            onCheckOut={(qty) => onAdjustHardware(id, hw.name, qty)}
           />
         ))}
       </div>
 
-      <div className="project-action">
-        <Button
-          variant={joined ? 'outlined' : 'contained'}
-          color={joined ? 'error' : 'primary'}
-          onClick={() => onToggleJoin(id)}
-        >
-          {joined ? 'Leave' : 'Join'}
-        </Button>
-      </div>
+      <Button variant="contained" color="inherit" onClick={() => onToggleJoin(id)}
+        sx={{ minWidth: 80 }}>
+        {joined ? 'Leave' : 'Join'}
+      </Button>
     </section>
   );
 }
